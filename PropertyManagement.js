@@ -1,30 +1,51 @@
+// src/components/Properties.js
 import React, { useState } from 'react';
+import PropertyCard from './PropertyCard';
+import AddPropertyModal from './AddPropertyModal';
+import './Properties.css';
 
-const PropertyManagement = () => {
-    const [units, setUnits] = useState([]);
+const Properties = () => {
+  const [properties, setProperties] = useState([
+    {
+      id: 1,
+      name: 'Sunrise Apartments',
+      address: '123 Main St, Nairobi',
+      type: 'Apartment',
+      units: 5,
+      occupied: 3,
+      image: 'https://via.placeholder.com/300'
+    },
+    // More properties...
+  ]);
 
-    const addUnit = (unit) => {
-        setUnits([...units, unit]);
-    };
+  const [showModal, setShowModal] = useState(false);
 
-    const removeUnit = (unitId) => {
-        setUnits(units.filter(unit => unit.id !== unitId));
-    };
-
-    return (
-        <div className="card">
-            <h2>Property Management</h2>
-            {/* Add/remove rental units logic here */}
-            {/* Display units */}
-            {units.map(unit => (
-                <div key={unit.id}>
-                    <span>{unit.name}</span>
-                    <button onClick={() => removeUnit(unit.id)}>Remove</button>
-                </div>
-            ))}
-            <button onClick={() => addUnit({ id: Date.now(), name: 'New Unit' })}>Add Unit</button>
-        </div>
-    );
+  return (
+    <div className="properties">
+      <div className="properties-header">
+        <h1>Property Management</h1>
+        <button onClick={() => setShowModal(true)} className="add-property-btn">
+          + Add Property
+        </button>
+      </div>
+      
+      <div className="property-grid">
+        {properties.map(property => (
+          <PropertyCard key={property.id} property={property} />
+        ))}
+      </div>
+      
+      {showModal && (
+        <AddPropertyModal 
+          onClose={() => setShowModal(false)} 
+          onAddProperty={(newProperty) => {
+            setProperties([...properties, newProperty]);
+            setShowModal(false);
+          }}
+        />
+      )}
+    </div>
+  );
 };
 
-export default PropertyManagement;S
+export default Properties;
